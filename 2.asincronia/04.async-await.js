@@ -1,4 +1,4 @@
-function Hola(nombre) {
+async function Hola(nombre) {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       if (true) {
@@ -11,8 +11,7 @@ function Hola(nombre) {
   });
 }
 
-// recibe nombre para pasarlo como parametro a la callback adios
-function Hablar(nombre) {
+async function Hablar(nombre) {
   return new Promise ((resolve, reject) => {
     setTimeout(function () {
       if (true){
@@ -25,7 +24,7 @@ function Hablar(nombre) {
   })
 }
 
-function Adios(nombre) {
+async function Adios(nombre) {
   return new Promise((resolve, reject) => {
     setTimeout(function () {
       if (true){
@@ -38,27 +37,17 @@ function Adios(nombre) {
   });
 }
 
-function Conversacion(nombre, veces, callback) {
-  if (veces >= 0) {
-    Hablar(function () {
-      Conversacion(nombre, --veces, callback);
-    });
-  } else {
-    Adios(nombre, callback);
-  }
+// de esta manera podemos convertir procesos asincronos
+// en aparentemente sincronos, pero la función sigue
+// siendo asincrona.
+async function main(){
+  let nombre = await Hola('Async Await');
+  await Hablar()
+  await Hablar()
+  await Hablar()
+  await Adios(nombre);
 }
 
-console.log('iniciando proceso...');
-Hola('Fernando')
-  .then(Hablar)
-  .then(Hablar)
-  .then(Hablar)
-  .then(Hablar)
-  .then(Adios)
-  .then((nombre) => {
-    console.log('terminado el proceso');
-  })
-  .catch((error) => {
-    console.error('ha habiado un error');
-    console.error(error);
-  });
+console.log('Empezamos proceso...')
+main();
+console.log('Terminamos proceso...')
